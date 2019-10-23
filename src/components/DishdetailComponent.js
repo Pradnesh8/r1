@@ -37,8 +37,8 @@ class Dishdetail extends Component {
                         comment.map(comment => 
                             (
                                 <ul className="list-unstyled">
-                                <li className="list-unstyled mt-3">{comment.comment}</li>
-                                <li className="list-unstyled mt-3">-- {comment.author}, <Moment format='MMM DD, YYYY'>{comment.date}</Moment></li>
+                                <li className="list-unstyled mt-4">{comment.comment}</li>
+                                <li className="list-unstyled mt-4">-- {comment.author}, <Moment format='MMM DD, YYYY'>{comment.date}</Moment></li>
                                 </ul>    
                             )
                             )
@@ -56,14 +56,16 @@ class Dishdetail extends Component {
             console.log(this.props.dishdetail);
             if (this.props.dishdetail != null)
                 return(
-                    <div className="row">
-                      <div  className="col-12 col-md-5 m-1">
-                        {this.renderDish(this.props.dishdetail)}
-                      </div>
-                      <div  className="col-12 col-md-5 m-1">
-                          <h4>Comments</h4>
-                          {this.renderComments(this.props.dishdetail.comments)}
-                      </div>
+                    <div className="container">
+                        <div className="row">
+                        <div  className="col-12 col-md-5 m-1">
+                            {this.renderDish(this.props.dishdetail)}
+                        </div>
+                        <div  className="col-12 col-md-5 m-1">
+                            <h4>Comments</h4>
+                            {this.renderComments(this.props.dishdetail.comments)}
+                        </div>
+                        </div>
                     </div>
                 );
             else

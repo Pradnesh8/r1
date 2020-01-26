@@ -5,7 +5,7 @@ import { Card, CardImg, CardText, CardBody,
      Row, Col, Label } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
-        
+
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
@@ -29,17 +29,21 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
                     <div></div>
                 );
         }
-        function RenderComments({comments}) {
+        function RenderComments({comments, addComment, dishId}) {
             if (comments != null)
                 return(
-                    comments.map(comment => 
-                        (
+                    <div>{
+                        comments.map((comment =>{
+                            return (
                             <ul className="list-unstyled">
+                            <li key={comment.id}></li>
                             <li className="list-unstyled mt-4">{comment.comment}</li>
                             <li className="list-unstyled mt-4">-- {comment.author}, <Moment format='MMM DD, YYYY'>{comment.date}</Moment></li>
                             </ul>    
-                        )
-                        )
+                        );
+                    }))}
+                        <CommentForm dishId={dishId} addComment={addComment} />   
+                    </div>
                 );
             else
                 return(
@@ -65,8 +69,8 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
               }
         
               handleSubmit(values) {
-                console.log('Current State is: ' + JSON.stringify(values));
-                alert('Current State is: ' + JSON.stringify(values));
+                  this.toggleModal();
+                  this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
                 // event.preventDefault();
               }
             
@@ -89,8 +93,8 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
                                 </Control.select>
                             </Row>
                             <Row className="form-group">
-                                <Label htmlFor="firstname" className="m-2">Your Name</Label>
-                                    <Control.text model=".firstname" id="firstname" name="firstname"
+                                <Label htmlFor="author" className="m-2">Your Name</Label>
+                                    <Control.text model=".author" id="author" name="author"
                                         placeholder="Name"
                                         className="form-control m-2"
                                         validators={{
@@ -99,7 +103,7 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
                                          />
                                     <Errors
                                         className="text-danger"
-                                        model=".firstname"
+                                        model=".author"
                                         show="touched"
                                         messages={{
                                             minLength: 'Must be greater than 2 characters',
@@ -108,8 +112,8 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
                                      />
                             </Row>
                             <Row className="form-group">
-                                <Label htmlFor="message" md={2}>Comment</Label>
-                                    <Control.textarea model=".message" id="message" name="message"
+                                <Label htmlFor="comment" md={2}>Comment</Label>
+                                    <Control.textarea model=".comment" id="comment" name="comment"
                                         rows="6"
                                         className="form-control m-2" />
                             </Row>
@@ -148,8 +152,7 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
                             <RenderDish dish={props.dish} />
                         </div>
                         <div className="col-12 col-md-5 m-1">
-                            <RenderComments comments={props.comments} />
-                    <CommentForm />
+                        <RenderComments comments={props.comments} dishId={props.dish.id} addComment={props.addComment} />
                         </div>
                     </div>
                     </div>

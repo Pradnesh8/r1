@@ -6,6 +6,7 @@ import { Card, CardImg, CardText, CardBody,
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -18,7 +19,7 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
             if (dish != null)
                 return(
                     <Card>
-                        <CardImg top src={dish.image} alt={dish.name} />
+                        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
                         <CardBody>
                           <CardTitle>{dish.name}</CardTitle>
                           <CardText>{dish.description}</CardText>
@@ -30,7 +31,7 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
                     <div></div>
                 );
         }
-        function RenderComments({comments, addComment, dishId}) {
+        function RenderComments({comments, postComment, dishId}) {
             if (comments != null)
                 return(
                     <div>{
@@ -43,7 +44,7 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
                             </ul>    
                         );
                     }))}
-                        <CommentForm dishId={dishId} addComment={addComment} />   
+                        <CommentForm dishId={dishId} postComment={postComment} />   
                     </div>
                 );
             else
@@ -71,7 +72,7 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
         
               handleSubmit(values) {
                   this.toggleModal();
-                  this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+                  this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
                 // event.preventDefault();
               }
             
@@ -170,7 +171,7 @@ const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val
                             <RenderDish dish={props.dish} />
                         </div>
                         <div className="col-12 col-md-5 m-1">
-                        <RenderComments comments={props.comments} dishId={props.dish.id} addComment={props.addComment} />
+                        <RenderComments comments={props.comments} dishId={props.dish.id} postComment={props.postComment} />
                         </div>
                     </div>
                     </div>
